@@ -186,6 +186,42 @@ class Settings(BaseSettings):
         ),
     )
 
+    target_components: list[str] = Field(
+        default=["attn.o_proj", "mlp.down_proj"],
+        description=(
+            "List of component names to target for abliteration. "
+            'Currently supported values are "attn.o_proj" and "mlp.down_proj".'
+        ),
+    )
+
+    use_ara: bool = Field(
+        default=True,
+        description=(
+            "Whether to use Arbitrary-Rank Ablation (ARA), an abliteration method based on matrix optimization, "
+            "instead of traditional directional ablation."
+        ),
+    )
+
+    use_ara_lora: bool = Field(
+        default=False,
+        description=(
+            "Use LoRA in ARA instead of full-weight editing. Makes it compatible with quantization and removes model reloads."
+        ),
+    )
+
+    ara_lora_rank: int = Field(
+        default=128,
+        description="If LoRA is used in ARA, this sets up its rank. Keep it high enough to simulate the 'arbitrary' effect.",
+    )
+
+    use_piqa: bool = Field(
+        default=False,
+        description=(
+            "Whether to use the Physical Interaction: Question Answering (PIQA) benchmark "
+            "as the quality metric instead of the Kullback-Leibler divergence."
+        ),
+    )
+
     batch_size: NonNegativeInt = Field(
         default=0,  # auto
         description="Number of input sequences to process in parallel (0 = auto).",
